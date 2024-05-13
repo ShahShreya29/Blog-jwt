@@ -1,46 +1,51 @@
 const Blog = require("../Model/BlogModel");
 const BlogService = {
-  addBlog: async (blog) => {
+
+  addBlog: async (blog, file) => { 
     try {
       const newBlog = new Blog({
         blog_title: blog.blog_title,
         blog_content: blog.blog_content,
+        blog_img: file.filename 
       });
       const savedBlog = await newBlog.save();
       return savedBlog;
     } catch (error) {
       console.error(error);
-      throw error; // Throw the error to be caught by the caller
+      throw error; 
     }
   },
+
   blogList: async () => {
     try {
       const fetchedBlogs = await Blog.find().lean().exec();
       return fetchedBlogs;
     } catch (error) {
       console.error(error);
-      throw error; // Throw the error to be caught by the caller
+      throw error; 
     }
   },
-  updateBlog: async (blog,id) => {
+
+  getBlogById: async (id) => {
     try {
-      // const { blog_title, blog_content } = blog;
+      const blog = await Blog.findById(id);
+      return blog;
+    } catch (error) {
+      throw new Error('Failed to fetch blog');
+    }
+  },
 
-      // const updatedBlog = {};
-      // if (blog_title) updatedBlog.blog_title = blog.blog_title;
-      // if (blog_content) updatedBlog.blog_content = blog.blog_content;
-      // if (blog_img) updatedBlog.blog_img = file.filename;
+  updateBlog: async (id, blog) => {
+    try {
+      const updatedData = {};
+      if (blog.blog_title) updatedData.blog_title = blog.blog_title;
+      if (blog.blog_content) updatedData.blog_content = blog.blog_content; 
 
-      const blogs = await Blog.findByIdAndUpdate(
-        { id },
-        { blog_title: blog.blog_title, blog_content : blog.blog_content}
-      );
-      return blogs;
-      // res.status(200).json(blogs);
+      const updatedBlog = await Blog.findByIdAndUpdate(id, updatedData, { new: true });
+      return updatedBlog;
     } catch (error) {
       console.error(error);
-      return error;
-      // res.status(500).json({ error: "Failed to update blog" });
+      throw error;
     }
   },
 
@@ -50,9 +55,10 @@ const BlogService = {
       return deletedBlog;
     } catch (error) {
       console.error(error);
-      throw error; // Throw the error to be caught by the caller
+      throw error;
     }
   },
 };
 
 module.exports = BlogService;
+ 

@@ -4,7 +4,8 @@ const BlogController = {
   addBlog: async (req, res) => {
     try {
       const { blog_title, blog_content } = req.body;
-      const savedBlog = await BlogService.addBlog({ blog_title, blog_content });
+      const blog_img = req.file; 
+      const savedBlog = await BlogService.addBlog({ blog_title, blog_content }, blog_img);
       res.status(201).json(savedBlog);
     } catch (error) {
       console.error(error);
@@ -22,12 +23,30 @@ const BlogController = {
     }
   },
 
+  getBlogById: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const blog = await BlogService.getBlogById(id);
+      if (blog) {
+        return res.status(200).json(blog);
+      }
+      return res.status(404).json({ error: "Blog not found" });
+      // res.status(200).json(blog);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  },
+
   updateBlog: async (req, res) => {
     try {
-      const { _id } = req.params;
+      const { id } = req.params;
       const { blog_title, blog_content } = req.body;
-      const updatedBlog = await BlogService.updateBlog({_id,  blog_title, blog_content });
-      res.status(200).json(updatedBlog);
+      const updatedBlog = await BlogService.updateBlog(id, {
+        blog_title,
+        blog_content,
+      });
+      res.status(200).json({updatedBlog,message: "Blog updated"} );
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Failed to update blog" });
@@ -43,7 +62,7 @@ const BlogController = {
       console.error(error);
       res.status(500).json({ error: "Failed to delete blog" });
     }
-  }
+  },
 };
 
 module.exports = BlogController;

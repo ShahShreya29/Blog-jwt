@@ -32,8 +32,11 @@ const AddBlog = () => {
       formData.append("blog_content", values.blog_content);
 
       const response = await axios.post(
-        "http://localhost:8081/api/blogs/addBlog",
-        formData
+        "http://localhost:5001/api/blogs/addBlog",
+        formData, 
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
       );
       console.log(response.data);
       navigate("/BlogList");

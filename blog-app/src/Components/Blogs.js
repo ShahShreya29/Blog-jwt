@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import LogoutBtn from "./LogoutBtn";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import api from "../config";
 
 const Blogs = () => {
   const [blogData, setBlogData] = useState([]);
@@ -14,7 +15,7 @@ const Blogs = () => {
 
   const getData = async () => {
     try {
-      const response = await axios.get("http://localhost:8081/api/blogs/blogList", {
+      const response = await api.get("http://localhost:5001/api/blogs/blogList", {
         headers: {
           Authorization: `Bearer ${token.token}`,
         },
@@ -31,7 +32,7 @@ const Blogs = () => {
         <div className="card m-2" style={{ width: "20rem" }}>
           <div className="card-body">
             <h5 className="card-img">
-              <img src={`http://localhost:8081/uploads/${blog.blog_img}`} />{" "}
+              <img src={`http://localhost:5001/uploads/${blog.blog_img}`} />{" "}
             </h5>
             <h5 className="card-title">{blog.blog_title}</h5>
             <p className="card-text">{blog.blog_content}</p>
@@ -43,9 +44,9 @@ const Blogs = () => {
   return (
     <>
       <div className="justify-content-between m-5">
-        <div class="row ">
-          <div class="col-10">
-            {/* <h3 className="">Welcome {token.name.toUpperCase()}</h3> */}
+        <div className="row ">
+          <div className="col-10">
+            <h3 className="">Welcome {token.name.toUpperCase()}</h3>
           </div>
           <div className="col-2">
             <Link to="/LoginForm">

@@ -19,7 +19,8 @@ const BlogList = () => {
 
   const getBlog = async () => {
     try {
-      const response = await axios.get("http://localhost:8081/api/blogs/blogList");
+      const response = await 
+      api.get("http://localhost:5001/api/blogs/blogList");
       setBlogData(response.data);
       console.log(response.data);
     } catch (error) {
@@ -29,7 +30,7 @@ const BlogList = () => {
 
   const handleRemoveBlog = async () => {
     try {
-      await axios.delete(`http://localhost:8081/api/blogs/deleteBlog/${selectedId}`);
+      await api.delete(`http://localhost:5001/api/blogs/deleteBlog/${selectedId}`);
       getBlog();
     } catch (error) {
       console.error(error);
@@ -46,7 +47,7 @@ const BlogList = () => {
         <div className="card m-2" style={{ width: "20rem" }}>
           <div className="card-body">
             <h5 className="card-img">
-              <img src={`http://localhost:8081/uploads/${blog.blog_img}`} alt="BlogImg"/>{" "}
+              <img src={`http://localhost:5001/uploads/${blog.blog_img}`} alt="BlogImg"/>{" "}
             </h5>
             <h5 className="card-title">{blog.blog_title}</h5>
             <p className="card-text">{blog.blog_content}</p>

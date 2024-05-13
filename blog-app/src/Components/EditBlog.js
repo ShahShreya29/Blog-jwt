@@ -1,4 +1,4 @@
-import { useParams, useNavigate, json } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import TextField from "./TextField";
 import AddBtn from "./AddBtn";
 import { Formik, Form } from "formik";
@@ -31,7 +31,7 @@ const EditBlog = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8081/api/blogs/blogList/${id}`)
+      .get(`http://localhost:5001/api/blogs/getBlogById/${id}`)
       .then((response) => {
         console.log("Response data:", response.data);
         setBlogData({
@@ -44,30 +44,7 @@ const EditBlog = () => {
       });
   }, [id, setBlogData]);
 
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setBlogData({
-  //     ...blogData,
-  //     [name]: value,
-  //   });
-  // };
 
-  // const handleUpdateBlog = async (e) => {
-  //   // e.preventDefault();
-  //   try {
-  //     const response = await axios.put(
-  //       `http://localhost:8081/api/updateBlog/${id}`,
-  //       e
-  //     );
-  //     setBlogData({
-  //       blog_title: "",
-  //       blog_content: "",
-  //     });
-  //     navigate("/blogList");
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
   const onImageUpdate = (e) => {
     setImage(e.target.files[0]);
   }; 
@@ -75,15 +52,13 @@ const EditBlog = () => {
     const handleUpdateBlog = async (e) => {
     try {
       const formData = new FormData();
-      if (image) {
-        formData.append("blog_img", image); // Append image file if it exists
-      }
-      // formData.append("blog_img", image);
+      formData.append("blog_img", image);
       formData.append("blog_title", e.blog_title);
       formData.append("blog_content", e.blog_content);
  
+      console.log(e.blog_title);
       const response = await axios.put(
-        `http://localhost:8081/api/blogs/updateBlog/${id}`,
+        `http://localhost:5001/api/blogs/updateBlog/${id}`,
         formData,   
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -129,7 +104,6 @@ const EditBlog = () => {
                 
                   <div>
                     <AddBtn
-                      // onClick={handleUpdateBlog}
                       value={"updateBlog"}
                       name="UpdateBlog"
                       style={{

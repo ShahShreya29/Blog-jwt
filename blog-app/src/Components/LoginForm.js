@@ -5,6 +5,7 @@ import { Formik, Form } from "formik";
 import * as yup from "yup";
 import { useState } from "react";
 import axios from "axios";
+// import api from "../config";
 
 const LoginForm = () => {
   const validate = yup.object({
@@ -24,7 +25,7 @@ const LoginForm = () => {
   const handleLogin = async (values) => {
     try {
       const response = await axios.post(
-        "http://localhost:8081/api/users/login",
+        "http://localhost:5001/api/users/login",
         values
       );
       console.log("res", response.data);
@@ -32,14 +33,14 @@ const LoginForm = () => {
         "login",
         JSON.stringify({
           login: true,
-          name:response.data.user.name,
-       token: response.data.accessToken,
-         refreshToken:response.data.refreshToken
+          name: response.data.user.name,
+          accessToken: response.data.accessToken.accessToken,
+          refreshToken: response.data.accessToken.refreshToken,
         })
       );
-      console.log("resTOKEN",response.data.refreshToken);
-      sessionStorage.setItem("refreshToken",response.data.refreshToken)
-      let rt = sessionStorage.getItem("refreshToken")
+      console.log("resTOKEN", response.data.accessToken.refreshToken);
+      sessionStorage.setItem("refreshToken", response.data.accessToken.refreshToken);
+      let rt = sessionStorage.getItem("refreshToken");
       console.log(rt);
 
       alert("Login Successfully Done " + " " + response.data.user.name);
@@ -94,11 +95,10 @@ const LoginForm = () => {
                       LogIn
                     </AddBtn>
                   </div>
-                
                 </div>
                 <h6 className="text-center m-3">
-                    PLEASE <Link to="/">SIGNUP!!</Link> FIRST
-                  </h6>
+                  PLEASE <Link to="/">SIGNUP!!</Link> FIRST
+                </h6>
               </div>
             </Form>
           </div>
@@ -109,4 +109,3 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
-

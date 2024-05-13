@@ -23,8 +23,9 @@ const UserService = {
 
   login: async (user) => {
     try {
-      const existingUser = await users.findOne({ email: user.email });
-      return existingUser; // If found, return user object; otherwise, null
+      const existingUser = await users.findOne({ email: user.email, password: user.password });
+      // return (existingUser.email, existingUser.password); 
+      return existingUser;
     } catch (error) {
       return { error: "Internal Server Error" };
     }

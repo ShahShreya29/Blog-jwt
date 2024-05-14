@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const UserController = require("../Controller/UserController.js")
 const BlogController = require("../Controller/BlogController.js")
-const upload = require("../Middleware/multer.js")
-const verificationToken = require("../jwt/jwt.js").verificationToken;
+const upload = require("../Middleware/Multer.js")
+const verificationToken = require("../Middleware/verificationToken.js").verificationToken;
 
 
 router.post("/signup", UserController.signup);

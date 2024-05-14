@@ -1,4 +1,5 @@
 const BlogService = require("../Services/BlogService");
+const { sendError } = require("../errorHandler");
 
 const BlogController = {
   addBlog: async (req, res) => {
@@ -9,7 +10,8 @@ const BlogController = {
       res.status(201).json(savedBlog);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Failed to add blog" });
+      // res.status(500).json({ error: "Failed to add blog" });
+      return sendError(res, "Failed to add blog");
     }
   },
 
@@ -19,7 +21,8 @@ const BlogController = {
       res.status(200).json(blogs);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Failed to fetch blogs" });
+      // res.status(500).json({ error: "Failed to fetch blogs" });
+      return sendError(res, "Failed to fetch blogs");
     }
   },
 
@@ -30,11 +33,13 @@ const BlogController = {
       if (blog) {
         return res.status(200).json(blog);
       }
-      return res.status(404).json({ error: "Blog not found" });
+      // return res.status(404).json({ error: "Blog not found" });
+      return sendError(res, "Blog not found");
       // res.status(200).json(blog);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Internal server error" });
+      // res.status(500).json({ error: "Internal server error" });
+      return sendError(res, "Internal server error");
     }
   },
 
@@ -46,10 +51,11 @@ const BlogController = {
         blog_title,
         blog_content,
       });
-      res.status(200).json({updatedBlog,message: "Blog updated"} );
+      res.status(200).json(updatedBlog);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Failed to update blog" });
+      // res.status(500).json({ error: "Failed to update blog" });
+      return sendError(res, "Failed to update blog");
     }
   },
 
@@ -60,7 +66,8 @@ const BlogController = {
       res.status(200).json(deletedBlog);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Failed to delete blog" });
+      // res.status(500).json({ error: "Failed to delete blog" });
+      return sendError(res, "Failed to delete blog");
     }
   },
 };

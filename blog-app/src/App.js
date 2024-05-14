@@ -1,10 +1,10 @@
-import SignupForm from "./Components/SignupForm";
+import SignupForm from "./LayOuts/SignupForm";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LoginForm from "./Components/LoginForm";
-import BlogList from "./Components/BlogList";
-import Blogs from "./Components/Blogs";
-import AddBlog from "./Components/AddBlog";
-import EditBlog from "./Components/EditBlog";
+import LoginForm from "./LayOuts/LoginForm";
+import BlogList from "./LayOuts/BlogList";
+import Blogs from "./LayOuts/Blogs";
+import AddBlog from "./LayOuts/AddBlog";
+import EditBlog from "./LayOuts/EditBlog";
 import Error from "./Error";
 
 function App() {

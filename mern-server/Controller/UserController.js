@@ -1,6 +1,7 @@
 const UserService = require("../Services/UserService");
-const { AccessToken } = require("../jwt/jwt");
 const jwt = require("jsonwebtoken");
+const { sendError } = require("../errorHandler");
+require('dotenv').config();
 
 const UserController = {
   signup: async (req, res) => {
@@ -13,11 +14,13 @@ const UserController = {
         role,
       });
       if (user.error) {
-        return res.status(400).json(user);
+        // return res.status(400).json(user);
+        return sendError(res, "Bad request");
       }
       res.status(200).json(user);
     } catch (error) {
-      res.status(500).json({ error: "Internal Server Error" });
+      // res.status(500).json({ error: "Internal Server Error" });
+      return sendError(res, "Internal server error");
     }
   },
 
@@ -25,16 +28,29 @@ const UserController = {
     try {
       const { email, password } = req.body;
       const user = await UserService.login({ email, password });
+
       if (user) {
-        console.log("id",user.id,"emailll",user.email);
-        const accessToken = await AccessToken(user.id);
+        const payload = {
+          id: user.id,
+        };
+        const accessToken = jwt.sign(payload, process.env.JWT_KEY, {
+          expiresIn: "15s",
+        });
         console.log(accessToken);
-        res.status(200).json({ user, accessToken});
+        const refreshToken = jwt.sign(payload, process.env.JWT_KEY, {
+          expiresIn: "1min",
+        });
+        // console.log("id",user.id,"emailll",user.email);
+        // const accessToken = await AccessToken(user.id);
+        // console.log(accessToken);
+        res.status(200).json({ user, accessToken, refreshToken });
       } else {
-        res.status(404).json({ error: "User not found" });
+        return sendError(res, "User not found");
+        // res.status(404).json({ error: "User not found" });
       }
     } catch (error) {
-      res.status(500).json({ error: "Internal Server Error" });
+      return sendError(res, "Internal server error");
+      // res.status(500).json({ error: "Internal Server Error" });
     }
   },
 
@@ -42,8 +58,8 @@ const UserController = {
     const refreshToken = req.headers["refresh-token"];
 
     try {
-      const decoded = jwt.verify(refreshToken, "jwtSecretKeys");
-      const newAccessToken = jwt.sign({ id: decoded.id }, "jwtSecretKeys", {
+      const decoded = jwt.verify(refreshToken, process.env.JWT_KEY);
+      const newAccessToken = jwt.sign({ id: decoded.id }, process.env.JWT_KEY, {
         expiresIn: "15s",
       });
 
@@ -52,10 +68,10 @@ const UserController = {
         accessToken: newAccessToken,
       });
     } catch (error) {
-        return res.status(500).json({ message: "Internal server error" });
+      return sendError(res, "Internal server error");
+      // return res.status(500).json({ message: "Internal server error" });
     }
   },
-
 };
 
 module.exports = UserController;

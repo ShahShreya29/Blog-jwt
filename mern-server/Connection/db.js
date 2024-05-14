@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
 
-mongoose.connect('mongodb://127.0.0.1:27017/blogApp')
+mongoose.connect(process.env.CONNECTION_PATH)
 
 var db = mongoose.connection;
 
@@ -12,4 +13,4 @@ db.on('error',(error)=>{
     console.error('connection error',error);
 })
 
-module.exports = mongoose
+module.exports = mongoose 
